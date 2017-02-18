@@ -1,0 +1,13 @@
+html .something > foobar[something=x] #xb {
+  color: white;
+}
+
+.foo-bar .something2:before, #something[title*=foo]:hover  {
+  color: white;
+}
+
+@media (min-width: 240px) {
+  .something3 {
+    color: white;
+  }
+}
