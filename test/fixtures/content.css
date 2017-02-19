@@ -11,3 +11,7 @@ html .something > foobar[something=x] #xb {
     color: white;
   }
 }
+
+.something {
+  color: white;
+}
