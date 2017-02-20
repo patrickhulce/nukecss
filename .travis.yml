@@ -8,7 +8,6 @@ node_js:
   - v7
   - v6
 before_install:
-  - npm prune
   - npm install -g coveralls
 script:
   - npm run test:lint
