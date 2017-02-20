@@ -10,6 +10,7 @@ describe('nuke.js', function () {
     const result = nuke(htmlContent, cssContent)
     expect(result).to.not.contain('foobar[something=x]')
     expect(result).to.not.contain('.something3')
+    expect(result).to.not.contain('.foo-bar-3')
   })
 
   it('should remove empty media sets', function () {
@@ -20,5 +21,10 @@ describe('nuke.js', function () {
   it('should respect nukecss:* comments', function () {
     const result = nuke(htmlContent, cssContent)
     expect(result).to.contain('.totally-unused')
+  })
+
+  it('should support multiple sources', function () {
+    const result = nuke([htmlContent, '<div id="foo-bar-3"></div>'], cssContent)
+    expect(result).to.contain('.foo-bar-3')
   })
 })

@@ -6,6 +6,10 @@ html .something > foobar[something=x] #xb {
   color: white;
 }
 
+.foo-bar-3 {
+  color: white;
+}
+
 /* nukecss:disable */
 .totally-unused {
   color: white;
