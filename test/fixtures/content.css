@@ -6,6 +6,12 @@ html .something > foobar[something=x] #xb {
   color: white;
 }
 
+/* nukecss:disable */
+.totally-unused {
+  color: white;
+}
+/* nukecss:enable */
+
 @media (min-width: 240px) {
   .something3 {
     color: white;
