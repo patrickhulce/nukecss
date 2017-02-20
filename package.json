@@ -1,10 +1,10 @@
 {
-  "name": "prunedcss",
+  "name": "nukecss",
   "version": "0.0.0",
   "description": "Eliminates unused CSS rules.",
-  "main": "./lib/prune.js",
+  "main": "./lib/nuke.js",
   "bin": {
-    "bin/index.js": "prunedcss"
+    "bin/index.js": "nukecss"
   },
   "scripts": {
     "test": "npm run test:lint && npm run test:unit",
@@ -16,14 +16,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/patrickhulce/prunedcss.git"
+    "url": "https://github.com/patrickhulce/nukecss.git"
   },
   "author": "Patrick Hulce <patrick.hulce@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/patrickhulce/prunedcss/issues"
+    "url": "https://github.com/patrickhulce/nukecss/issues"
   },
-  "homepage": "https://github.com/patrickhulce/prunedcss#readme",
+  "homepage": "https://github.com/patrickhulce/nukecss#readme",
   "xo": {
     "env": [
       "node",

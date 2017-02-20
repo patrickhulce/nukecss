@@ -1,13 +1,13 @@
 const fs = require('fs')
 const path = require('path')
-const prune = require('../lib/prune')
+const nuke = require('../lib/nuke')
 
-describe('prune.js', function () {
+describe('nuke.js', function () {
   const cssContent = fs.readFileSync(path.join(__dirname, '/fixtures/content.css'), 'utf8')
 
   it('should remove unused rules', function () {
     const html = '<div class="foo-bar" id="something"></div>'
-    const result = prune(html, cssContent)
+    const result = nuke(html, cssContent)
     expect(result).to.have.property('length').greaterThan(10).lessThan(120)
     expect(result).to.not.contain('foobar[something=x]')
     expect(result).to.not.contain('.something3')
@@ -15,7 +15,7 @@ describe('prune.js', function () {
 
   it('should remove empty media sets', function () {
     const html = '<div class="foo-bar" id="something"></div>'
-    const result = prune(html, cssContent)
+    const result = nuke(html, cssContent)
     expect(result).to.not.contain('@media')
   })
 })
