@@ -3,7 +3,7 @@ const path = require('path')
 const nuke = require('../lib/nuke')
 
 describe('nuke.js', function () {
-  const htmlContent = '<div class="foo-bar" id="something"></div>'
+  const htmlContent = fs.readFileSync(path.join(__dirname, '/fixtures/content.html'), 'utf8')
   const cssContent = fs.readFileSync(path.join(__dirname, '/fixtures/content.css'), 'utf8')
 
   it('should remove unused rules', function () {

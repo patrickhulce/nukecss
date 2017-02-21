@@ -4,9 +4,10 @@
   "description": "Eliminates unused CSS rules.",
   "main": "./lib/nuke.js",
   "bin": {
-    "bin/index.js": "nukecss"
+    "bin/nukecss.js": "nukecss"
   },
   "scripts": {
+    "start": "node ./bin/nukecss.js",
     "test": "npm run test:lint && npm run test:unit",
     "test:unit": "mocha --reporter spec --require test/bootstrap 'test/**/*.test.js'",
     "test:lint": "./node_modules/.bin/xo './lib/**/*.js' './test/**/*.js'",
