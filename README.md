@@ -5,7 +5,7 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![Dependencies](https://david-dm.org/patrickhulce/nukecss.svg)](https://david-dm.org/patrickhulce/nukecss)
 
-Eliminates unused CSS rules. Built for single-page apps from the ground up. Inspired by [purifycss](https://github.com/purifycss/purifycss) and [uncss](https://github.com/giakki/uncss).
+Eliminates unused CSS rules. Built from the ground up for single-page apps. Inspired by [purifycss](https://github.com/purifycss/purifycss) and [uncss](https://github.com/giakki/uncss).
 
 ## How It Works
 * Parses the CSS with [gonzales-pe](https://github.com/tonyganch/gonzales-pe) and walks the AST to find the IDs, classes, and DOM types used in selectors.
@@ -15,13 +15,14 @@ Eliminates unused CSS rules. Built for single-page apps from the ground up. Insp
 ## Usage
 `npm install --save nukecss`
 
+#### myfile.js
 ```js
-const nukecss = require('nukecss')
+const jsignored = "js-class other-class"
+const woah = ["still", "works"].join("-")
+```
 
-const javascript = 'const jsignored = "js-class other-class"'
-const javascript2 = 'const woah = ["still", "works"].join("-")'
-const html = '<div id="primary" class="html-class">html-ignored</div>'
-const css = `
+#### myfile.css
+```css
 .jsignored { color: white; }
 .html-ignored { color: white; }
 .js-class { color: white; }
@@ -30,16 +31,23 @@ const css = `
 #primary { color: white; }
 #primary > .unused { color: white; }
 .also-unused { color: white; }
-`
+```
 
-const nuked = nukecss([
+#### nuke.js
+```js
+const fs = require('fs')
+const nukecss = require('nukecss')
+
+const javascript = fs.readFileSync('myfile.js')
+const css = fs.readFileSync('myfile.css')
+const html = '<div id="primary" class="html-class">html-ignored</div>'
+
+nukecss([
   {content: javascript, type: 'js'},
-  {content: javascript2, type: 'js'},
   {content: html, type: 'html'},
 ], css)
-> console.log(nuked)
-.js-class { color: white; }
-.other-class { color: white; }
-.still-works { color: white; }
-#primary { color: white; }
+// .js-class { color: white; }
+// .other-class { color: white; }
+// .still-works { color: white; }
+// #primary { color: white; }
 ```
