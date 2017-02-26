@@ -10,7 +10,7 @@ node_js:
 before_install:
   - npm install -g coveralls
 script:
-  - npm start -- ./test/fixtures/content.html ./test/fixtures/content.css
+  - npm start
   - npm run test:lint
   - npm run test:coverage
 after_success:
