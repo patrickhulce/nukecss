@@ -21,7 +21,7 @@ const fs = require('fs')
 const nukecss = require('nukecss')
 const css = fs.readFileSync('myfile.css')
 
-nukecss('./**/*.(js|html)', css)
+nukecss('./**/*.@(js|html)', css)
 // .js-class { color: white; }
 // .other-class { color: white; }
 // .still-works { color: white; }

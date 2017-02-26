@@ -7,7 +7,7 @@
     "bin/nukecss.js": "nukecss"
   },
   "scripts": {
-    "start": "node ./bin/nukecss.js test/fixtures/content.html test/fixtures/content.css",
+    "start": "node ./bin/nukecss.js 'test/fixtures/*.@(js|html)' test/fixtures/content.css",
     "test": "npm run test:lint && npm run test:unit",
     "test:unit": "mocha --reporter spec --require test/bootstrap 'test/**/*.test.js'",
     "test:lint": "./node_modules/.bin/xo './lib/**/*.js' './test/**/*.js'",
