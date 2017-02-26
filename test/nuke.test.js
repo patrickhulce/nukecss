@@ -76,4 +76,26 @@ describe('nuke.js', function () {
       expect(nuked).to.contain('.still-works')
     })
   })
+
+  context('when sources are paths', () => {
+    const filePath = 'file://' + path.join(__dirname, '/fixtures/content.html')
+    const cssContent = fs.readFileSync(path.join(__dirname, '/fixtures/content.css'), 'utf8')
+
+    it('should remove unused rules', function () {
+      const result = nukecss(filePath, cssContent)
+      expect(result).to.not.contain('foobar[something=x]')
+      expect(result).to.not.contain('.something3')
+      expect(result).to.not.contain('.foo-bar-3')
+    })
+
+    it('should remove empty media sets', function () {
+      const result = nukecss(filePath, cssContent)
+      expect(result).to.not.contain('@media')
+    })
+
+    it('should respect nukecss:* comments', function () {
+      const result = nukecss(filePath, cssContent)
+      expect(result).to.contain('.totally-unused')
+    })
+  })
 })
