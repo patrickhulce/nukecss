@@ -52,8 +52,6 @@ describe('nuke.js', function () {
       {content: htmlContent, type: 'html'},
     ], cssContent)
 
-    console.log(nuked)
-
     it('should remove unused rules', function () {
       expect(nuked).to.not.contain('#primary > .unused')
       expect(nuked).to.not.contain('.also-unused')
