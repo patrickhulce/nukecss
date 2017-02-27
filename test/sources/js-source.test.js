@@ -10,8 +10,15 @@ describe('sources/js-source.js', () => {
     it('should join to another JsSource', () => {
       const sourceA = new JsSource('var x = "foo"')
       const sourceB = new JsSource('var b = "bar"')
-      const joined = sourceA.join(sourceB)
-      expect(joined).to.have.property('type', 'js')
+      expect(sourceA.join(sourceB)).to.have.property('type', 'js')
+      expect(sourceB.join(sourceA)).to.have.property('type', 'js')
+    })
+
+    it('should join to a malformed JsSource', () => {
+      const sourceA = new JsSource('var x = "foo')
+      const sourceB = new JsSource('var b = "bar"')
+      expect(sourceA.join(sourceB)).to.have.property('type', 'js')
+      expect(sourceB.join(sourceA)).to.have.property('type', 'js')
     })
 
     it('should not join to another non-JsSource', () => {
