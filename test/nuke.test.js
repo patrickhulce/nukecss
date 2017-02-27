@@ -2,41 +2,41 @@ const fs = require('fs')
 const path = require('path')
 const nukecss = require('../lib/nuke')
 
-describe('nuke.js', function () {
+describe('nuke.js', () => {
   context('when content is basic', () => {
     const htmlContent = fs.readFileSync(path.join(__dirname, '/fixtures/content.html'), 'utf8')
     const cssContent = fs.readFileSync(path.join(__dirname, '/fixtures/content.css'), 'utf8')
 
-    it('should keep used rules', function () {
+    it('should keep used rules', () => {
       const result = nukecss(htmlContent, cssContent)
       expect(result).to.contain('#something[title*=foo]:hover')
       expect(result).to.contain('.something')
     })
 
-    it('should remove unused rules', function () {
+    it('should remove unused rules', () => {
       const result = nukecss(htmlContent, cssContent)
       expect(result).to.not.contain('foobar[something=x]')
       expect(result).to.not.contain('.something3')
       expect(result).to.not.contain('.foo-bar-3')
     })
 
-    it('should remove empty media sets', function () {
+    it('should remove empty media sets', () => {
       const result = nukecss(htmlContent, cssContent)
       expect(result).to.not.contain('@media')
     })
 
-    it('should respect nukecss:* comments', function () {
+    it('should respect nukecss:* comments', () => {
       const result = nukecss(htmlContent, cssContent)
       expect(result).to.contain('.totally-unused')
     })
 
-    it('should respect the whitelist', function () {
+    it('should respect the whitelist', () => {
       const whitelist = ['foo-bar-3']
       const result = nukecss(htmlContent, cssContent, {whitelist})
       expect(result).to.contain('.foo-bar-3')
     })
 
-    it('should respect the blacklist', function () {
+    it('should respect the blacklist', () => {
       const blacklist = ['something']
       const extraHtml = '<div id="blacklist-test">test</div>'
       const extraCss = '\n.something, #blacklist-test { color: white; }'
@@ -44,7 +44,7 @@ describe('nuke.js', function () {
       expect(result).to.contain('#blacklist-test')
     })
 
-    it('should support multiple sources', function () {
+    it('should support multiple sources', () => {
       const result = nukecss([htmlContent, '<div id="foo-bar-3"></div>'], cssContent)
       expect(result).to.contain('.foo-bar-3')
     })
@@ -73,27 +73,27 @@ describe('nuke.js', function () {
       {content: htmlContent, type: 'html'},
     ], cssContent, {amalgamate: true})
 
-    it('should remove unused rules', function () {
+    it('should remove unused rules', () => {
       expect(nuked).to.not.contain('#primary > .unused')
       expect(nuked).to.not.contain('.also-unused')
     })
 
-    it('should not remove used rules', function () {
+    it('should not remove used rules', () => {
       expect(nuked).to.contain('.js-class')
       expect(nuked).to.contain('.other-class')
       expect(nuked).to.contain('.html-class')
       expect(nuked).to.contain('#primary')
     })
 
-    it('should remove unused rules mentioned in non-strings', function () {
+    it('should remove unused rules mentioned in non-strings', () => {
       expect(nuked).to.not.contain('jsignored')
     })
 
-    it.skip('should remove unused rules mentioned in textnodes', function () {
+    it.skip('should remove unused rules mentioned in textnodes', () => {
       expect(nuked).to.not.contain('html-ignored')
     })
 
-    it('should not remove unused rules dynamically joined', function () {
+    it('should not remove unused rules dynamically joined', () => {
       expect(nuked).to.contain('.still-works')
       expect(nuked).to.contain('.bar-still-works')
     })
@@ -103,19 +103,19 @@ describe('nuke.js', function () {
     const filePath = 'file://' + path.join(__dirname, '/fixtures/content.html')
     const cssContent = fs.readFileSync(path.join(__dirname, '/fixtures/content.css'), 'utf8')
 
-    it('should remove unused rules', function () {
+    it('should remove unused rules', () => {
       const result = nukecss(filePath, cssContent)
       expect(result).to.not.contain('foobar[something=x]')
       expect(result).to.not.contain('.something3')
       expect(result).to.not.contain('.foo-bar-3')
     })
 
-    it('should remove empty media sets', function () {
+    it('should remove empty media sets', () => {
       const result = nukecss(filePath, cssContent)
       expect(result).to.not.contain('@media')
     })
 
-    it('should respect nukecss:* comments', function () {
+    it('should respect nukecss:* comments', () => {
       const result = nukecss(filePath, cssContent)
       expect(result).to.contain('.totally-unused')
     })
