@@ -31,7 +31,7 @@ describe('nuke.js', function () {
   })
 
   context('when content is parseable', () => {
-    const jsContent = 'const jsignored = "js-class other-class"'
+    const jsContent = 'const jsignored = "js-class other-class"; const foo = "bar"'
     const moreJsContent = 'const woah = ["still", "works"].join("-")'
     const htmlContent = '<div id="primary" class="html-class">html-ignored</div>'
     const cssContent = `
@@ -40,6 +40,7 @@ describe('nuke.js', function () {
       .js-class { color: white; }
       .other-class { color: white; }
       .still-works { color: white; }
+      .bar-still-works { color: white }
       .html-class { color: white; }
       #primary { color: white; }
       #primary > .unused { color: white; }
@@ -50,7 +51,7 @@ describe('nuke.js', function () {
       {content: jsContent, type: 'js'},
       {content: moreJsContent, type: 'js'},
       {content: htmlContent, type: 'html'},
-    ], cssContent)
+    ], cssContent, {amalgamate: true})
 
     it('should remove unused rules', function () {
       expect(nuked).to.not.contain('#primary > .unused')
@@ -74,6 +75,7 @@ describe('nuke.js', function () {
 
     it('should not remove unused rules dynamically joined', function () {
       expect(nuked).to.contain('.still-works')
+      expect(nuked).to.contain('.bar-still-works')
     })
   })
 
