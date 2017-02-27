@@ -7,6 +7,12 @@ describe('nuke.js', function () {
     const htmlContent = fs.readFileSync(path.join(__dirname, '/fixtures/content.html'), 'utf8')
     const cssContent = fs.readFileSync(path.join(__dirname, '/fixtures/content.css'), 'utf8')
 
+    it('should keep used rules', function () {
+      const result = nukecss(htmlContent, cssContent)
+      expect(result).to.contain('#something[title*=foo]:hover')
+      expect(result).to.contain('.something')
+    })
+
     it('should remove unused rules', function () {
       const result = nukecss(htmlContent, cssContent)
       expect(result).to.not.contain('foobar[something=x]')
@@ -22,6 +28,20 @@ describe('nuke.js', function () {
     it('should respect nukecss:* comments', function () {
       const result = nukecss(htmlContent, cssContent)
       expect(result).to.contain('.totally-unused')
+    })
+
+    it('should respect the whitelist', function () {
+      const whitelist = ['foo-bar-3']
+      const result = nukecss(htmlContent, cssContent, {whitelist})
+      expect(result).to.contain('.foo-bar-3')
+    })
+
+    it('should respect the blacklist', function () {
+      const blacklist = ['something']
+      const extraHtml = '<div id="blacklist-test">test</div>'
+      const extraCss = '\n.something, #blacklist-test { color: white; }'
+      const result = nukecss([htmlContent, extraHtml], cssContent + extraCss, {blacklist})
+      expect(result).to.contain('#blacklist-test')
     })
 
     it('should support multiple sources', function () {
