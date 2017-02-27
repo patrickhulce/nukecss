@@ -93,7 +93,7 @@ describe('sources/factory.js', () => {
 
     context('when opts.simple=true', () => {
       const opts = {simple: true}
-      it('should always use Source', () => {
+      it('should always use SimpleSource', () => {
         const content = 'const foobar = "baz"'
         const sources = SourceFactory.fromObject({content, type: 'js'}, opts)
         expect(sources).to.have.length(1)
