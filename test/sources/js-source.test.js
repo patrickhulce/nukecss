@@ -1,4 +1,4 @@
-const Source = require('../../lib/sources/source.js')
+const SimpleSource = require('../../lib/sources/simple-source.js')
 const JsSource = require('../../lib/sources/js-source.js')
 
 describe('sources/js-source.js', () => {
@@ -23,7 +23,7 @@ describe('sources/js-source.js', () => {
 
     it('should not join to another non-JsSource', () => {
       const sourceA = new JsSource('var x = "foo"')
-      const sourceB = new Source('other content')
+      const sourceB = new SimpleSource('other content')
       expect(() => sourceA.join(sourceB)).to.throw()
       expect(() => sourceB.join(sourceA)).to.throw()
     })
