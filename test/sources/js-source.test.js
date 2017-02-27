@@ -1,6 +1,27 @@
+const Source = require('../../lib/sources/source.js')
 const JsSource = require('../../lib/sources/js-source.js')
 
 describe('sources/js-source.js', () => {
+  it('should return the type', () => {
+    expect(new JsSource('var x = 1')).to.have.property('type', 'js')
+  })
+
+  describe('#join', () => {
+    it('should join to another JsSource', () => {
+      const sourceA = new JsSource('var x = "foo"')
+      const sourceB = new JsSource('var b = "bar"')
+      const joined = sourceA.join(sourceB)
+      expect(joined).to.have.property('type', 'js')
+    })
+
+    it('should not join to another non-JsSource', () => {
+      const sourceA = new JsSource('var x = "foo"')
+      const sourceB = new Source('other content')
+      expect(() => sourceA.join(sourceB)).to.throw()
+      expect(() => sourceB.join(sourceA)).to.throw()
+    })
+  })
+
   describe('#contains', () => {
     context('when script is simple', () => {
       const script = `
@@ -48,6 +69,17 @@ describe('sources/js-source.js', () => {
 
         expect(source.contains('is')).to.equal(true)
         expect(source.contains('going on')).to.equal(false)
+      })
+    })
+
+    context('when script is joined', () => {
+      it('should find tokens stretching across both', () => {
+        const sourceA = new JsSource('var x = "foo"')
+        const sourceB = new JsSource('var b = "bar"; var c = "-"')
+        const joined = sourceA.join(sourceB)
+        expect(joined.contains('foo')).to.equal(true)
+        expect(joined.contains('bar')).to.equal(true)
+        expect(joined.contains('foo-bar')).to.equal(true)
       })
     })
   })

@@ -73,5 +73,22 @@ describe('sources/factory.js', () => {
         expect(sources[0].contains('baz')).to.equal(true)
       })
     })
+
+    context('when opts.amalgamate=true', () => {
+      const opts = {amalgamate: true}
+
+      it('should join sources of same type', () => {
+        const filePath = path.join(__dirname, '../fixtures/*.js')
+        const sources = SourceFactory.fromObject({path: filePath}, opts)
+        expect(sources).to.have.length(1)
+        expect(sources[0].contains('baz-bam')).to.equal(true)
+      })
+
+      it('should not join sources of different type', () => {
+        const filePath = path.join(__dirname, '../fixtures/*.@(js|html)')
+        const sources = SourceFactory.fromObject({path: filePath}, opts)
+        expect(sources).to.have.length(2)
+      })
+    })
   })
 })
