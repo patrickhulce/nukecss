@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const SourceMapConsumer = require('source-map').SourceMapConsumer
 const nukecss = require('../lib/nuke')
 
 describe('nuke.js', () => {
@@ -118,6 +119,41 @@ describe('nuke.js', () => {
     it('should respect nukecss:* comments', () => {
       const result = nukecss(filePath, cssContent)
       expect(result).to.contain('.totally-unused')
+    })
+  })
+
+  context('when sourceMaps are enabled', () => {
+    const filePath = 'file://' + path.join(__dirname, '/fixtures/content.html')
+    const cssContent = fs.readFileSync(path.join(__dirname, '/fixtures/content.css'), 'utf8')
+    const sourceMap = {from: 'content.css', to: 'content.css', inline: false}
+    const result = nukecss(filePath, cssContent, {sourceMap})
+
+    function findLineAndColumn(css, string) {
+      const lines = css.split('\n')
+      const line = lines.findIndex(l => l.includes(string)) + 1
+      if (line === -1) {
+        throw new Error(`could not find string ${string}`)
+      }
+
+      const column = lines[line - 1].indexOf(string) + 1
+      return {line, column}
+    }
+
+    it('should return an object', () => {
+      expect(result).to.be.an('object')
+      expect(result).to.have.property('css')
+      expect(result).to.have.property('map')
+    })
+
+    it('should produce a valid sourcemap', () => {
+      const string = '.something {'
+      const realLocation = findLineAndColumn(cssContent, string)
+      const location = findLineAndColumn(result.css, string)
+      const consumer = new SourceMapConsumer(result.map)
+
+      const sourceMapPosition = consumer.originalPositionFor(location)
+      expect(sourceMapPosition.line).to.be.greaterThan(location.line)
+      expect(sourceMapPosition.line).to.equal(realLocation.line)
     })
   })
 })
