@@ -19,6 +19,7 @@ describe('nuke.js', () => {
       expect(result).to.not.contain('foobar[something=x]')
       expect(result).to.not.contain('.something3')
       expect(result).to.not.contain('.foo-bar-3')
+      expect(result).to.not.contain('madeup:not')
     })
 
     it('should remove empty media sets', () => {

@@ -25,3 +25,7 @@ html .something > foobar[something=x] #xb {
 .unused, .something {
   color: white;
 }
+
+madeup:not([role]) {
+  color: white;
+}
