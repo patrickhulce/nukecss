@@ -3,26 +3,26 @@ const JsSource = require('../../lib/sources/js-source.js')
 
 describe('sources/js-source.js', () => {
   it('should return the type', () => {
-    expect(new JsSource('var x = 1')).to.have.property('type', 'js')
+    expect(JsSource.from('var x = 1')).to.have.property('type', 'js')
   })
 
   describe('#join', () => {
     it('should join to another JsSource', () => {
-      const sourceA = new JsSource('var x = "foo"')
-      const sourceB = new JsSource('var b = "bar"')
+      const sourceA = JsSource.from('var x = "foo"')
+      const sourceB = JsSource.from('var b = "bar"')
       expect(sourceA.join(sourceB)).to.have.property('type', 'js')
       expect(sourceB.join(sourceA)).to.have.property('type', 'js')
     })
 
-    it('should join to a malformed JsSource', () => {
-      const sourceA = new JsSource('var x = "foo')
-      const sourceB = new JsSource('var b = "bar"')
-      expect(sourceA.join(sourceB)).to.have.property('type', 'js')
-      expect(sourceB.join(sourceA)).to.have.property('type', 'js')
+    it('should not join to a malformed JsSource', () => {
+      const sourceA = JsSource.from('var x = "foo')
+      const sourceB = JsSource.from('var b = "bar"')
+      expect(() => sourceA.join(sourceB)).to.throw()
+      expect(() => sourceB.join(sourceA)).to.throw()
     })
 
     it('should not join to another non-JsSource', () => {
-      const sourceA = new JsSource('var x = "foo"')
+      const sourceA = JsSource.from('var x = "foo"')
       const sourceB = new SimpleSource('other content')
       expect(() => sourceA.join(sourceB)).to.throw()
       expect(() => sourceB.join(sourceA)).to.throw()
@@ -38,7 +38,7 @@ describe('sources/js-source.js', () => {
         const dynamicVar = ['fa', 'icon'].join('-')
       `
 
-      const source = new JsSource(script)
+      const source = JsSource.from(script)
 
       it('should find tokens as strings', () => {
         expect(source).to.contain('the-class')
@@ -65,11 +65,12 @@ describe('sources/js-source.js', () => {
 
     context('when script is malformed', () => {
       it('should not throw', () => {
-        expect(() => new JsSource('const foo != "whaaaa')).to.not.throw()
+        expect(() => JsSource.from('const foo != "whaaaa')).to.not.throw()
       })
 
-      it('should fallback to regex search', () => {
-        const source = new JsSource('const foo != "whaaa-is-going onhere')
+      it('should fallback to SimpleSource', () => {
+        const source = JsSource.from('const foo != "whaaa-is-going onhere')
+        expect(source).to.have.property('type', 'simple')
         expect(source).to.contain('const')
         expect(source).to.contain('foo')
         expect(source).to.contain('whaaa-is-going')
@@ -81,8 +82,8 @@ describe('sources/js-source.js', () => {
 
     context('when script is joined', () => {
       it('should find tokens stretching across both', () => {
-        const sourceA = new JsSource('var x = "foo"')
-        const sourceB = new JsSource('var b = "bar"; var c = "-"')
+        const sourceA = JsSource.from('var x = "foo"')
+        const sourceB = JsSource.from('var b = "bar"; var c = "-"')
         const joined = sourceA.join(sourceB)
         expect(joined.contains('foo')).to.equal(true)
         expect(joined.contains('bar')).to.equal(true)

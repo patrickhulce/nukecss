@@ -3,26 +3,26 @@ const HtmlSource = require('../../lib/sources/html-source.js')
 
 describe('sources/html-source.js', () => {
   it('should return the type', () => {
-    expect(new HtmlSource('<html></html>')).to.have.property('type', 'html')
+    expect(HtmlSource.from('<html></html>')).to.have.property('type', 'html')
   })
 
   describe('#join', () => {
     it('should join to another HtmlSource', () => {
-      const sourceA = new HtmlSource('<html></html>')
-      const sourceB = new HtmlSource('<html></html>')
+      const sourceA = HtmlSource.from('<html></html>')
+      const sourceB = HtmlSource.from('<html></html>')
       expect(sourceA.join(sourceB)).to.have.property('type', 'html')
       expect(sourceB.join(sourceA)).to.have.property('type', 'html')
     })
 
-    it('should join to a malformed HtmlSource', () => {
-      const sourceA = new HtmlSource('<html></html>')
-      const sourceB = new HtmlSource('<html')
-      expect(sourceA.join(sourceB)).to.have.property('type', 'html')
-      expect(sourceB.join(sourceA)).to.have.property('type', 'html')
+    it('should not join to a malformed HtmlSource', () => {
+      const sourceA = HtmlSource.from('<html></html>')
+      const sourceB = HtmlSource.from('some<<invalid markup')
+      expect(() => sourceA.join(sourceB)).to.throw()
+      expect(() => sourceB.join(sourceA)).to.throw()
     })
 
     it('should not join to another non-HtmlSource', () => {
-      const sourceA = new HtmlSource('<html></html>')
+      const sourceA = HtmlSource.from('<html></html>')
       const sourceB = new SimpleSource('other content')
       expect(() => sourceA.join(sourceB)).to.throw()
       expect(() => sourceB.join(sourceA)).to.throw()
@@ -53,7 +53,7 @@ describe('sources/html-source.js', () => {
         </html>
       `
 
-      const source = new HtmlSource(html)
+      const source = HtmlSource.from(html)
 
       it('should find tokens as elements', () => {
         expect(source).to.contain('div')
