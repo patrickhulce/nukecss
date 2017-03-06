@@ -56,35 +56,35 @@ describe('sources/html-source.js', () => {
       const source = new HtmlSource(html)
 
       it('should find tokens as elements', () => {
-        expect(source.contains('div')).to.equal(true)
-        expect(source.contains('h1')).to.equal(true)
-        expect(source.contains('p')).to.equal(true)
-        expect(source.contains('script')).to.equal(true)
+        expect(source).to.contain('div')
+        expect(source).to.contain('h1')
+        expect(source).to.contain('p')
+        expect(source).to.contain('script')
       })
 
       it('should find tokens as classes', () => {
-        expect(source.contains('container')).to.equal(true)
-        expect(source.contains('lead')).to.equal(true)
+        expect(source).to.contain('container')
+        expect(source).to.contain('lead')
       })
 
       it('should find tokens as multiple classes', () => {
-        expect(source.contains('several')).to.equal(true)
-        expect(source.contains('classes')).to.equal(true)
-        expect(source.contains('in-a-row')).to.equal(true)
+        expect(source).to.contain('several')
+        expect(source).to.contain('classes')
+        expect(source).to.contain('in-a-row')
       })
 
       it('should find tokens as identifiers', () => {
-        expect(source.contains('my-hero-element')).to.equal(true)
+        expect(source).to.contain('my-hero-element')
       })
 
       it('should not find tokens as other attribtues', () => {
-        expect(source.contains('stylesheet')).to.equal(false)
-        expect(source.contains('javascript')).to.equal(false)
+        expect(source).to.not.contain('stylesheet')
+        expect(source).to.not.contain('javascript')
       })
 
       it('should not find tokens as text', () => {
-        expect(source.contains('Header')).to.equal(false)
-        expect(source.contains('examplelongtext')).to.equal(false)
+        expect(source).to.not.contain('Header')
+        expect(source).to.not.contain('examplelongtext')
       })
     })
   })
