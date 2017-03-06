@@ -33,17 +33,17 @@ describe('nuke.js', () => {
     })
 
     it('should respect the whitelist', () => {
-      const whitelist = ['foo-bar-3']
+      const whitelist = ['foO-Bar-3']
       const result = nukecss(htmlContent, cssContent, {whitelist})
       expect(result).to.contain('.foo-bar-3')
     })
 
     it('should respect the blacklist', () => {
-      const blacklist = ['something']
+      const blacklist = ['blAckList-test']
       const extraHtml = '<div id="blacklist-test">test</div>'
-      const extraCss = '\n.something, #blacklist-test { color: white; }'
+      const extraCss = '\n#blacklist-test { color: white; }'
       const result = nukecss([htmlContent, extraHtml], cssContent + extraCss, {blacklist})
-      expect(result).to.contain('#blacklist-test')
+      expect(result).to.not.contain('#blacklist-test')
     })
 
     it('should support multiple sources', () => {

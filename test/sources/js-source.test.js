@@ -44,6 +44,7 @@ describe('sources/js-source.js', () => {
         expect(source).to.contain('the-class')
         expect(source).to.contain('the-other-class')
         expect(source).to.contain('fa')
+        expect(source).to.contain('tHe-cLaSs')
       })
 
       it('should find tokens within strings', () => {

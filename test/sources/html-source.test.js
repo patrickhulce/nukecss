@@ -64,6 +64,7 @@ describe('sources/html-source.js', () => {
 
       it('should find tokens as classes', () => {
         expect(source).to.contain('container')
+        expect(source).to.contain('ConTainer')
         expect(source).to.contain('lead')
       })
 
