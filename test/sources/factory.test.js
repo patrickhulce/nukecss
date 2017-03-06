@@ -75,9 +75,17 @@ describe('sources/factory.js', () => {
       expect(sources).to.have.length(2)
     })
 
-    it('should use the proper source', () => {
+    it('should use JsSource', () => {
       const content = 'const foobar = "baz"'
       const sources = SourceFactory.fromObject({content, type: 'js'})
+      expect(sources).to.have.length(1)
+      expect(sources[0].contains('foobar')).to.equal(false)
+      expect(sources[0].contains('baz')).to.equal(true)
+    })
+
+    it('should use HtmlSource', () => {
+      const content = '<html><p class="baz">foobar</p></html>'
+      const sources = SourceFactory.fromObject({content, type: 'html'})
       expect(sources).to.have.length(1)
       expect(sources[0].contains('foobar')).to.equal(false)
       expect(sources[0].contains('baz')).to.equal(true)
