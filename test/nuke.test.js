@@ -91,7 +91,7 @@ describe('nuke.js', () => {
       expect(nuked).to.not.contain('jsignored')
     })
 
-    it.skip('should remove unused rules mentioned in textnodes', () => {
+    it('should remove unused rules mentioned in textnodes', () => {
       expect(nuked).to.not.contain('html-ignored')
     })
 

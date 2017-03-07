@@ -33,9 +33,16 @@ describe('sources/js-source.js', () => {
     context('when script is simple', () => {
       const script = `
         const myVar = 'the-class'
-        const otherVar = 'the-other-class'
+        const otherVar = 'the-OtHer-cLass'
         const html = '<div class="inner-class">Content</div>'
         const dynamicVar = ['fa', 'icon'].join('-')
+        const classes = {
+          inVisIble: true,
+          blocK__Element: true,
+        }
+
+        classes.aDditIonal_class = false
+        const no_find = window.should_not_be_found(classes.also_not_found)
       `
 
       const source = JsSource.from(script)
@@ -56,11 +63,27 @@ describe('sources/js-source.js', () => {
         expect(source).to.contain('fa-icon')
       })
 
+      it('should find tokens as object keys', () => {
+        expect(source).to.contain('invisible')
+        expect(source).to.contain('block__element')
+      })
+
+      it('should find tokens as object key assignment', () => {
+        expect(source).to.contain('additional_class')
+      })
+
       it('should not find tokens as identifiers', () => {
         expect(source).to.not.contain('const')
         expect(source).to.not.contain('myVar')
         expect(source).to.not.contain('otherVar')
         expect(source).to.not.contain('dynamicVar')
+        expect(source).to.not.contain('window')
+        expect(source).to.not.contain('no_find')
+      })
+
+      it('should not find tokens as object key access', () => {
+        expect(source).to.not.contain('should_not_be_found')
+        expect(source).to.not.contain('also_not_found')
       })
     })
 
