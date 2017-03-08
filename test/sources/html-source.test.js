@@ -44,6 +44,9 @@ describe('sources/html-source.js', () => {
               <div class="several classes in-a-row">
                 <h1>My Header</h1>
                 <p class="lead">Examplelongtext</p>
+                <div ng-class="{strike: deleted}" ng-repeat="value in obj">
+                  {{template value}}
+                </div>
               </div>
             </div>
             <script>
@@ -66,6 +69,7 @@ describe('sources/html-source.js', () => {
         expect(source).to.contain('container')
         expect(source).to.contain('ConTainer')
         expect(source).to.contain('lead')
+        expect(source).to.contain('strike')
       })
 
       it('should find tokens as multiple classes', () => {
@@ -80,12 +84,17 @@ describe('sources/html-source.js', () => {
 
       it('should not find tokens as other attribtues', () => {
         expect(source).to.not.contain('stylesheet')
-        expect(source).to.not.contain('javascript')
+        expect(source).to.not.contain('text/javascript')
       })
 
       it('should not find tokens as text', () => {
         expect(source).to.not.contain('Header')
         expect(source).to.not.contain('examplelongtext')
+      })
+
+      it('should find tokens in script', () => {
+        expect(source).to.contain('my-javascript-class')
+        expect(source).to.not.contain('myJsVar')
       })
     })
   })
