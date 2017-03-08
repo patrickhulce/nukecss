@@ -12,15 +12,15 @@ describe('sources/factory.js', () => {
     it('should work with strings', () => {
       const sources = SourceFactory.from(['foobar'])
       expect(sources).to.have.length(1)
-      expect(sources[0].contains('foobar')).to.equal(true)
+      expect(sources[0]).to.contain('foobar')
     })
 
     it('should work with objects', () => {
       const content = 'const foobar = "baz"'
       const sources = SourceFactory.from([{content, type: 'js'}])
       expect(sources).to.have.length(1)
-      expect(sources[0].contains('foobar')).to.equal(false)
-      expect(sources[0].contains('baz')).to.equal(true)
+      expect(sources[0]).to.not.contain('foobar')
+      expect(sources[0]).to.contain('baz')
     })
 
     context('when opts.amalgamate=true', () => {
@@ -30,13 +30,26 @@ describe('sources/factory.js', () => {
         const filePath = path.join(__dirname, '../fixtures/*.js')
         const sources = SourceFactory.from({path: filePath}, opts)
         expect(sources).to.have.length(1)
-        expect(sources[0].contains('baz-bam')).to.equal(true)
+        expect(sources[0]).to.contain('baz-bam')
       })
 
       it('should not join sources of different type', () => {
         const filePath = path.join(__dirname, '../fixtures/*.@(js|html)')
         const sources = SourceFactory.from({path: filePath}, opts)
         expect(sources).to.have.length(2)
+      })
+
+      it('should work with malformed content', () => {
+        const raw = [
+          {content: 'const foo = "baz"', type: 'js'},
+          {content: 'const !=< what', type: 'js'},
+        ]
+
+        const sources = SourceFactory.from(raw, opts)
+        expect(sources).to.have.length(2)
+        expect(sources[0]).to.contain('baz')
+        expect(sources[0]).to.not.contain('foo')
+        expect(sources[1]).to.contain('what')
       })
 
       it('should work with already specified content', () => {
@@ -47,7 +60,7 @@ describe('sources/factory.js', () => {
 
         const sources = SourceFactory.from(raw, opts)
         expect(sources).to.have.length(1)
-        expect(sources[0].contains('baz-bam')).to.equal(true)
+        expect(sources[0]).to.contain('baz-bam')
       })
     })
   })
@@ -57,7 +70,7 @@ describe('sources/factory.js', () => {
       const filePath = path.join(__dirname, '../fixtures/content.html')
       const sources = SourceFactory.fromString(`file://${filePath}`)
       expect(sources).to.have.length(1)
-      expect(sources[0].contains('something')).to.equal(true)
+      expect(sources[0]).to.contain('something')
     })
   })
 
@@ -66,7 +79,7 @@ describe('sources/factory.js', () => {
       const filePath = path.join(__dirname, '../fixtures/content.html')
       const sources = SourceFactory.fromObject({path: filePath})
       expect(sources).to.have.length(1)
-      expect(sources[0].contains('something')).to.equal(true)
+      expect(sources[0]).to.contain('something')
     })
 
     it('should support globs', () => {
@@ -79,24 +92,24 @@ describe('sources/factory.js', () => {
       const content = 'const foobar = "baz"'
       const sources = SourceFactory.fromObject({content, type: 'js'})
       expect(sources).to.have.length(1)
-      expect(sources[0].contains('foobar')).to.equal(false)
-      expect(sources[0].contains('baz')).to.equal(true)
+      expect(sources[0]).to.not.contain('foobar')
+      expect(sources[0]).to.contain('baz')
     })
 
     it('should use HtmlSource', () => {
       const content = '<html><p class="baz">foobar</p></html>'
       const sources = SourceFactory.fromObject({content, type: 'html'})
       expect(sources).to.have.length(1)
-      expect(sources[0].contains('foobar')).to.equal(false)
-      expect(sources[0].contains('baz')).to.equal(true)
+      expect(sources[0]).to.not.contain('foobar')
+      expect(sources[0]).to.contain('baz')
     })
 
     it('should infer the proper source type from the extension', () => {
       const filePath = path.join(__dirname, '../fixtures/content.js')
       const sources = SourceFactory.fromObject({path: filePath})
       expect(sources).to.have.length(1)
-      expect(sources[0].contains('foobar')).to.equal(false)
-      expect(sources[0].contains('baz')).to.equal(true)
+      expect(sources[0]).to.not.contain('foobar')
+      expect(sources[0]).to.contain('baz')
     })
 
     context('when opts.simple=true', () => {
@@ -105,8 +118,8 @@ describe('sources/factory.js', () => {
         const content = 'const foobar = "baz"'
         const sources = SourceFactory.fromObject({content, type: 'js'}, opts)
         expect(sources).to.have.length(1)
-        expect(sources[0].contains('foobar')).to.equal(true)
-        expect(sources[0].contains('baz')).to.equal(true)
+        expect(sources[0]).to.contain('foobar')
+        expect(sources[0]).to.contain('baz')
       })
     })
   })
