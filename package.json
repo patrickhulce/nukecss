@@ -10,7 +10,7 @@
     "start": "node ./bin/nukecss.js 'test/fixtures/*.@(js|html)' test/fixtures/content.css",
     "test": "npm run test:lint && npm run test:unit",
     "test:unit": "mocha --reporter spec --require test/bootstrap 'test/**/*.test.js'",
-    "test:lint": "./node_modules/.bin/xo './lib/**/*.js' './test/**/*.js'",
+    "test:lint": "lint",
     "test:coverage": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- --require test/bootstrap 'test/**/*.test.js'",
     "test:watch": "mocha --watch --reporter dot --require test/bootstrap 'test/**/*.test.js'",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
@@ -57,6 +57,7 @@
     "postcss": "^5.2.15"
   },
   "devDependencies": {
+    "@patritech/lint": "^1.2.3",
     "chai": "^3.5.0",
     "cz-conventional-changelog": "^2.0.0",
     "istanbul": "^0.4.5",
@@ -64,7 +65,6 @@
     "semantic-release": "^6.3.2",
     "sinon": "^1.17.7",
     "sinon-chai": "^2.8.0",
-    "source-map": "^0.5.6",
-    "xo": "patrickhulce/xo#master"
+    "source-map": "^0.5.6"
   }
 }
