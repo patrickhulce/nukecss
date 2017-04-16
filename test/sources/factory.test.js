@@ -23,19 +23,19 @@ describe('sources/factory.js', () => {
       expect(sources[0]).to.contain('baz')
     })
 
-    context('when opts.amalgamate=true', () => {
-      const opts = {amalgamate: true}
+    context('when options.amalgamate=true', () => {
+      const options = {amalgamate: true}
 
       it('should join sources of same type', () => {
         const filePath = path.join(__dirname, '../fixtures/*.js')
-        const sources = SourceFactory.from({path: filePath}, opts)
+        const sources = SourceFactory.from({path: filePath}, options)
         expect(sources).to.have.length(1)
         expect(sources[0]).to.contain('baz-bam')
       })
 
       it('should not join sources of different type', () => {
         const filePath = path.join(__dirname, '../fixtures/*.@(js|html)')
-        const sources = SourceFactory.from({path: filePath}, opts)
+        const sources = SourceFactory.from({path: filePath}, options)
         expect(sources).to.have.length(2)
       })
 
@@ -45,7 +45,7 @@ describe('sources/factory.js', () => {
           {content: 'const !=< what', type: 'js'},
         ]
 
-        const sources = SourceFactory.from(raw, opts)
+        const sources = SourceFactory.from(raw, options)
         expect(sources).to.have.length(2)
         expect(sources[0]).to.contain('baz')
         expect(sources[0]).to.not.contain('foo')
@@ -58,7 +58,7 @@ describe('sources/factory.js', () => {
           {content: 'const bar = "-bam"', type: 'js'},
         ]
 
-        const sources = SourceFactory.from(raw, opts)
+        const sources = SourceFactory.from(raw, options)
         expect(sources).to.have.length(1)
         expect(sources[0]).to.contain('baz-bam')
       })
@@ -112,11 +112,11 @@ describe('sources/factory.js', () => {
       expect(sources[0]).to.contain('baz')
     })
 
-    context('when opts.simple=true', () => {
-      const opts = {simple: true}
+    context('when options.simple=true', () => {
+      const options = {simple: true}
       it('should always use SimpleSource', () => {
         const content = 'const foobar = "baz"'
-        const sources = SourceFactory.fromObject({content, type: 'js'}, opts)
+        const sources = SourceFactory.fromObject({content, type: 'js'}, options)
         expect(sources).to.have.length(1)
         expect(sources[0]).to.contain('foobar')
         expect(sources[0]).to.contain('baz')
