@@ -87,6 +87,44 @@ describe('sources/js-source.js', () => {
       })
     })
 
+    context('when options.strict=true', () => {
+      const script = `
+        const myVar = 'the-class'
+        const otherVar = 'the-OtHer-cLass'
+        const html = '<div class="inner-class">Content</div>'
+        const dynamicVar = ['fa', 'icon'].join('-')
+        const obj = {inVisible: true, BLOCK__element: 1}
+        obj.additional_class = false
+      `
+
+      const source = JsSource.from(script, {strict: true})
+
+      it('should find tokens as strings', () => {
+        expect(source).to.contain('the-class')
+        expect(source).to.contain('the-other-class')
+        expect(source).to.contain('fa')
+        expect(source).to.contain('tHe-cLaSs')
+      })
+
+      it('should not find tokens within strings', () => {
+        expect(source).to.not.contain('div')
+        expect(source).to.not.contain('inner-class')
+      })
+
+      it('should not find tokens as combinations of strings', () => {
+        expect(source).to.not.contain('fa-icon')
+      })
+
+      it('should find tokens as object keys', () => {
+        expect(source).to.contain('invisible')
+        expect(source).to.contain('block__element')
+      })
+
+      it('should find tokens as object key assignment', () => {
+        expect(source).to.contain('additional_class')
+      })
+    })
+
     context('when script is malformed', () => {
       it('should not throw', () => {
         expect(() => JsSource.from('const foo != "whaaaa')).to.not.throw()

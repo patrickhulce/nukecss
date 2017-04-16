@@ -97,5 +97,27 @@ describe('sources/html-source.js', () => {
         expect(source).to.not.contain('myJsVar')
       })
     })
+
+    context('when options.strict=true', () => {
+      const html = `
+        <html>
+        <div class="first-class second-class"></div>
+        <script>const hello = 'my-class'</script>
+        </html>
+      `
+
+      const source = HtmlSource.from(html, {strict: true})
+
+      it('should find tokens as multiple classes', () => {
+        expect(source).to.contain('first-class')
+        expect(source).to.contain('second-class')
+      })
+
+      it('should find tokens in script', () => {
+        expect(source).to.contain('my-class')
+        expect(source).to.not.contain('my')
+        expect(source).to.not.contain('hello')
+      })
+    })
   })
 })
