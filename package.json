@@ -4,10 +4,11 @@
   "description": "Eliminates unused CSS rules.",
   "main": "./lib/nuke.js",
   "bin": {
-    "bin/nukecss.js": "nukecss"
+    "nukecss": "bin/nukecss.js"
   },
   "scripts": {
     "start": "node ./bin/nukecss.js 'test/fixtures/*.@(js|html)' test/fixtures/content.css",
+    "start:debug": "node --inspect-brk ./bin/nukecss.js 'test/fixtures/*.@(js|html)' test/fixtures/content.css",
     "test": "npm run test:lint && npm run test:unit",
     "test:unit": "mocha --reporter spec --require test/bootstrap 'test/**/*.test.js'",
     "test:lint": "lint",
@@ -32,15 +33,6 @@
     "selectors"
   ],
   "homepage": "https://github.com/patrickhulce/nukecss#readme",
-  "xo": {
-    "env": [
-      "node",
-      "mocha"
-    ],
-    "global": [
-      "expect"
-    ]
-  },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
