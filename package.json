@@ -4,7 +4,7 @@
   "description": "Eliminates unused CSS rules.",
   "main": "./lib/nuke.js",
   "bin": {
-    "nukecss": "bin/nukecss.js"
+    "nukecss": "./bin/nukecss.js"
   },
   "scripts": {
     "start": "node ./bin/nukecss.js 'test/fixtures/*.@(js|html)' test/fixtures/content.css",
